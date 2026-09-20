@@ -1,14 +1,14 @@
 {
-  "name": "GasouusRTX Bot",
+  "name": "GasousiiRTX",
   "bot-account": {
-    "username": "GasouusRTX",
-    "password": "",
+    "username": "GasousiiRTX",
+    "password": "123456789",
     "type": "offline"
   },
   "server": {
-    "ip": "HardcoreHT1.aternos.me",
-    "port": 23904,
-    "version": "",
+    "ip": "hardcoreht1.play.hosting",
+    "port": 25565,
+    "version": "1.21.11",
     "try-creative": false
   },
   "position": {
@@ -20,13 +20,13 @@
   "utils": {
     "auto-auth": {
       "enabled": true,
-      "password": "bamboo1"
+      "password": "123456789"
     },
     "anti-afk": {
       "enabled": true,
       "sneak": true
     },
-    "chat-messages": {
+    "chat-messages": {/login 123456789
       "enabled": false,
       "repeat": false,
       "repeat-delay": 120,
