@@ -3,7 +3,7 @@
   "bot-account": {
     "username": "botsever1",
     "password": "",
-    "type": "online"
+    "type": "offline"
   },
   "server": {
     "ip": "animecity1.aternos.me",
