@@ -1,5 +1,5 @@
 {
-  "name": "AFK Bot",
+  "name": "chou chou smp robot",
   "bot-account": {
     "username": "botsever1",
     "password": "",
@@ -7,7 +7,7 @@
   },
   "server": {
     "ip": "animecity2.aternos.me",
-    "port": 4065,
+    "port": 46065,
     "version": "",
     "try-creative": false
   },
