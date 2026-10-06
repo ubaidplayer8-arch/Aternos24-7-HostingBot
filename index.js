@@ -404,8 +404,8 @@ function createBot() {
       const defaultMove = new Movements(bot, mcData);
       defaultMove.allowFreeMotion = false;
       defaultMove.canDig = false;
-      defaultMove.liquidCost = 1000;
-      defaultMove.fallDamageCost = 1000;
+      defaultMove.liquidCost = 5000;
+      defaultMove.fallDamageCost = 5000;
 
       initializeModules(bot, mcData, defaultMove, authPassword);
 
@@ -587,11 +587,17 @@ function initializeModules(bot, mcData, defaultMove, authPassword) {
       addInterval(() => {
         if (!bot || !botState.connected || typeof bot.setControlState !== 'function') return;
         try {
-          bot.look(Math.random() * Math.PI * 2, 0, true);
-          bot.setControlState('forward', true);
+          // Small yaw change, then a short delay before moving
+          bot.look(bot.entity.yaw + (Math.random() - 0.5) * (Math.PI / 2), 0, false);
           setTimeout(() => {
-            if (bot && typeof bot.setControlState === 'function') bot.setControlState('forward', false);
-          }, 500 + Math.floor(Math.random() * 1500));
+            if (!bot || !botState.connected || typeof bot.setControlState !== 'function') return;
+            try {
+              bot.setControlState('forward', true);
+              setTimeout(() => {
+                if (bot && typeof bot.setControlState === 'function') bot.setControlState('forward', false);
+              }, 500 + Math.floor(Math.random() * 1500));
+            } catch (e) { }
+          }, 500 + Math.floor(Math.random() * 500));
           botState.lastActivity = Date.now();
         } catch (e) {
           console.log('[AntiAFK] Walk error:', e.message);
@@ -669,7 +675,7 @@ function startCircleWalk(bot, defaultMove) {
   addInterval(() => {
     if (!bot || !botState.connected) return;
     const now = Date.now();
-    if (now - lastPathTime < 2000) return;
+    if (now - lastPathTime < 5000) return;
     lastPathTime = now;
     try {
       const x = bot.entity.position.x + Math.cos(angle) * radius;
@@ -689,15 +695,24 @@ function startRandomJump(bot) {
   addInterval(() => {
     if (!bot || !botState.connected || typeof bot.setControlState !== 'function') return;
     try {
-      bot.setControlState('jump', true);
+      // Random delay of 3-5 seconds before each jump to avoid rapid movement packets
+      const jumpDelay = 3000 + Math.floor(Math.random() * 2000);
       setTimeout(() => {
-        if (bot && typeof bot.setControlState === 'function') bot.setControlState('jump', false);
-      }, 300);
-      botState.lastActivity = Date.now();
+        if (!bot || !botState.connected || typeof bot.setControlState !== 'function') return;
+        try {
+          bot.setControlState('jump', true);
+          setTimeout(() => {
+            if (bot && typeof bot.setControlState === 'function') bot.setControlState('jump', false);
+          }, 300);
+          botState.lastActivity = Date.now();
+        } catch (e) {
+          console.log('[RandomJump] Error:', e.message);
+        }
+      }, jumpDelay);
     } catch (e) {
       console.log('[RandomJump] Error:', e.message);
     }
-  }, config.movement['random-jump'].interval);
+  }, Math.max(config.movement['random-jump'].interval || 0, 5000));
 }
 
 function startLookAround(bot) {
